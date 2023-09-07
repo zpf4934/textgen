@@ -38,6 +38,7 @@ from transformers import (
     DataCollatorForSeq2Seq,
     BitsAndBytesConfig,
     deepspeed,
+    EarlyStoppingCallback
 )
 from transformers.deepspeed import is_deepspeed_zero3_enabled
 from transformers.trainer import TRAINING_ARGS_NAME
@@ -443,6 +444,10 @@ class GptModel:
         # Initialize our Trainer
         data_collator = DataCollatorForSeq2Seq(self.tokenizer, label_pad_token_id=IGNORE_INDEX)
 
+        # Early stopping
+        callbacks = []
+        callbacks = callbacks + [EarlyStoppingCallback(self.args.early_stopping_patience, self.args.early_stopping_delta)] if self.args.use_early_stopping else callbacks
+
         if self.args.use_peft:
             trainer = SavePeftModelTrainer(
                 model=self.model,
@@ -451,6 +456,7 @@ class GptModel:
                 args=training_args,
                 tokenizer=self.tokenizer,
                 data_collator=data_collator,
+                callbacks=callbacks
             )
         else:
             trainer = Trainer(
@@ -460,6 +466,7 @@ class GptModel:
                 args=training_args,
                 tokenizer=self.tokenizer,
                 data_collator=data_collator,
+                callbacks=callbacks
             )
 
         # Training

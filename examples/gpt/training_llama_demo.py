@@ -16,6 +16,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--train_file', default='../data/sharegpt_zh_100_format.jsonl', type=str, help='Train file')
     parser.add_argument('--test_file', default='../data/sharegpt_zh_100_format.jsonl', type=str, help='Test file')
+    parser.add_argument('--eval_file', default='../data/sharegpt_zh_100_format.jsonl', type=str, help='Test file')
     parser.add_argument('--model_type', default='llama', type=str, help='Transformers model type')
     parser.add_argument('--model_name', default='shibing624/chinese-alpaca-plus-7b-hf', type=str,
                         help='Transformers model or path')
@@ -53,7 +54,7 @@ def main():
             "prompt_template_name": args.prompt_template_name,
         }
         model = GptModel(args.model_type, args.model_name, args=model_args)
-        model.train_model(args.train_file)
+        model.train_model(args.train_file, eval_data=args.eval_file)
     if args.do_predict:
         if model is None:
             model = GptModel(
