@@ -226,6 +226,7 @@ class GptModel:
             args=None,
             eval_data=None,
             verbose=True,
+            compute_metrics=None,
             **kwargs,
     ):
         """
@@ -238,6 +239,7 @@ class GptModel:
             args (optional): Optional changes to the args dict of the model. Any changes made will persist for the model.
             eval_data (optional): A DataFrame against which evaluation will be performed when evaluate_during_training is enabled. Is required if evaluate_during_training is enabled.
             verbose (optional): If True, all of the warnings related to data processing will be printed. 
+            compute_metrics (optional): compute_metrics function. 
             **kwargs: Additional metrics that should be used. Pass in the metrics as keyword arguments (name of metric: function to use).
                         A metric function should take in two parameters. The first parameter will be the true labels, and the second parameter will be the predictions. Both inputs
                         will be lists of strings. Note that this will slow down training significantly as the predicted sequences need to be generated.
@@ -284,7 +286,7 @@ class GptModel:
             save_steps=self.args.save_steps,
             optim=self.args.optimizer,
             save_strategy=self.args.save_strategy,
-            evaluation_strategy='steps' if eval_data is not None else 'no',
+            evaluation_strategy=self.args.evaluation_strategy if eval_data is not None else 'no',
             eval_steps=self.args.eval_steps if eval_data is not None else None,
             load_best_model_at_end=True if eval_data is not None else False,
             ddp_find_unused_parameters=False if self.ddp else None,
@@ -295,6 +297,7 @@ class GptModel:
             report_to=self.args.report_to,
             overwrite_output_dir=self.args.overwrite_output_dir,
             no_cuda=True if self.device == "cpu" else False,
+            run_name=self.args.run_name,
             **kwargs
         )
         resume_from_checkpoint = self.args.resume_from_checkpoint
@@ -456,7 +459,8 @@ class GptModel:
                 args=training_args,
                 tokenizer=self.tokenizer,
                 data_collator=data_collator,
-                callbacks=callbacks
+                callbacks=callbacks,
+                compute_metrics=compute_metrics
             )
         else:
             trainer = Trainer(
@@ -466,7 +470,8 @@ class GptModel:
                 args=training_args,
                 tokenizer=self.tokenizer,
                 data_collator=data_collator,
-                callbacks=callbacks
+                callbacks=callbacks,
+                compute_metrics=compute_metrics
             )
 
         # Training

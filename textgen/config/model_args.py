@@ -352,6 +352,7 @@ class GptArgs(ModelArgs):
     report_to = "tensorboard"
     optimizer: str = "adamw_torch"
     save_strategy: str = "steps"
+    evaluation_strategy: str = "steps"
     eval_steps: int = 200
     save_steps: int = 400
     max_eval_samples: int = 20
@@ -390,5 +391,6 @@ class GptArgs(ModelArgs):
     torch_compile: bool = False
     trust_remote_code: bool = True
     qlora: bool = False
-    preprocessing_num_workers: int = 4
+    preprocessing_num_workers: int = 1
     prompt_template_name: str = "vicuna"
+    run_name: str = "GPT"

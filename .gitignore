@@ -132,3 +132,6 @@ dmypy.json
 cache_dir/
 outputs*
 wandb/
+
+*.json
+*.csv
