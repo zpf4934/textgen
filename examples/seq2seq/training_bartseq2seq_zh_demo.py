@@ -83,6 +83,7 @@ def main():
             encoder_decoder_name=args.model_name,
             args=model_args
         )
+        print(model.model)
 
         def sim_text_chars(text1, text2):
             if not text1 or not text2:
