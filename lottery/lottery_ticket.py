@@ -181,10 +181,16 @@ class UnionLotto(Lotto):
             logger.warning("预测结果异常！！！！")
         logger.info("预测结果为：{}".format(','.join(exclude)))
         exclude = [int(i) for i in exclude]
-        red = [str(ball) for ball in range(1, 34) if ball not in exclude[:-1]]
-        blue = [str(ball) for ball in range(1,17) if ball != exclude[-1]]
-        ball = random.sample(red, k=6) + random.sample(blue, k=1)
-        logger.info("排除预测随机结果为：{}".format(','.join(ball)))
+        exclude_red = exclude[:-1]
+        exclude_blue = [exclude[-1]]
+        for _ in range(4):
+            red = [ball for ball in range(1, 34) if ball not in exclude_red]
+            blue = [ball for ball in range(1,17) if ball not in exclude_blue]
+            random_red = sorted(random.sample(red, k=6))
+            random_blue = sorted(random.sample(blue, k=1))
+            exclude_red = exclude_red + random_red
+            exclude_blue = exclude_blue + random_blue
+            logger.info("排除预测随机结果为：{}".format(','.join([str(i) for i in random_red + random_blue])))
 
     def analyze(self):
         df = pd.read_csv(self.save_path)
