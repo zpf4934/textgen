@@ -180,16 +180,9 @@ class UnionLotto(Lotto):
         if len(exclude) != 7:
             logger.warning("预测结果异常！！！！")
         logger.info("预测结果为：{}".format(','.join(exclude)))
-        exclude = [int(i) for i in exclude]
-        exclude_red = exclude[:-1]
-        exclude_blue = [exclude[-1]]
-        for _ in range(4):
-            red = [ball for ball in range(1, 34) if ball not in exclude_red]
-            blue = [ball for ball in range(1,17) if ball not in exclude_blue]
-            random_red = sorted(random.sample(red, k=6))
-            random_blue = sorted(random.sample(blue, k=1))
-            exclude_red = exclude_red + random_red
-            exclude_blue = exclude_blue + random_blue
+        for _ in range(10):
+            random_red = sorted(random.sample(range(1, 34), k=6))
+            random_blue = sorted(random.sample(range(1,17), k=1))
             logger.info("排除预测随机结果为：{}".format(','.join([str(i) for i in random_red + random_blue])))
 
     def analyze(self):
