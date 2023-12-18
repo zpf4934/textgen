@@ -516,7 +516,7 @@ def add_parser():
                         help='Prompt template name')
     parser.add_argument('--max_seq_length', default=700, type=int, help='Input max sequence length')
     parser.add_argument('--max_length', default=64, type=int, help='Output max sequence length')
-    parser.add_argument('--num_epochs', default=50, type=float, help='Number of training epochs')
+    parser.add_argument('--num_epochs', default=5, type=float, help='Number of training epochs')
     parser.add_argument('--batch_size', default=4, type=int, help='Batch size')
     parser.add_argument('--evaluation_strategy', default="epoch", type=str, choices=['no', 'steps', 'epoch'],
                         help='The evaluation strategy to adopt during training')
